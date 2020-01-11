@@ -15,7 +15,6 @@ import com.java.app.domain.Customer;
  */
 @Configuration
 @ComponentScan("com.java.app")
-@EnableJpaRepositories
 @SpringBootApplication
 @EntityScan(basePackageClasses=Customer.class)
 public class AccessingDataJpaApplication {
