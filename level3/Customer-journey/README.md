@@ -1,6 +1,7 @@
 1. Enable the spring security and customized password as 123456. Please use below to login if need.
 	
 	userName: user
+	
 	password: 123456
 
 
