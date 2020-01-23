@@ -6,6 +6,8 @@ import java.util.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.java.exception.UnknownCustomerException;
+
 /**
  * Service for Customer.
  *
@@ -30,12 +32,13 @@ public class CustomerRepoService {
      * Delete existing customer.
      *
      * @param customerId customer Id
+     * @throws UnknownCustomerException if customer does not exists
      */
-    public void deleteExistingCustomer(final long customerId) {
+    public void deleteExistingCustomer(final long customerId) throws UnknownCustomerException {
         final Customer customer = getCustomerById(customerId);
         if (customer == null) {
             // not an existing customer
-            throw new RuntimeException("Customer is invalid");
+            throw new UnknownCustomerException();
         }
         mCustomerRepository.deleteById(customerId);
     }
@@ -52,7 +55,7 @@ public class CustomerRepoService {
 
     /**
      * Get all customers.
-     * 
+     *
      * @return collection of {@link Customer}
      */
     public Collection<Customer> getCustomers() {

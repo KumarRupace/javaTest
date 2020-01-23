@@ -26,6 +26,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import com.java.exception.UnknownCustomerException;
+
 
 /**
  * Unit test CustomerRepoService
@@ -79,11 +81,15 @@ public class CustomerRepoServiceTest {
         // return valid bean
         when(mCustomerRepository.findById(anyLong())).thenReturn(new Customer("Jack", "Russell"));
 
-        // invoke
-        customerRepoService.deleteExistingCustomer(1099L);
-        // verify repository
-        verify(mCustomerRepository, times(1)).findById(eq(1099L));
-        verify(mCustomerRepository, times(1)).deleteById(eq(1099L));
+        try {
+            // invoke
+            customerRepoService.deleteExistingCustomer(1099L);
+            // verify repository
+            verify(mCustomerRepository, times(1)).findById(eq(1099L));
+            verify(mCustomerRepository, times(1)).deleteById(eq(1099L));
+        } catch (Exception e) {
+            fail("Unexpected exception caught");
+        }
     }
 
     /**
@@ -98,10 +104,12 @@ public class CustomerRepoServiceTest {
             // invoke
             customerRepoService.deleteExistingCustomer(1099L);
             fail("Expect exception");
-        } catch (Exception e) {
+        } catch (UnknownCustomerException e) {
             // verify repository
             verify(mCustomerRepository, times(1)).findById(eq(1099L));
             verify(mCustomerRepository, times(0)).deleteById(anyLong());
+        } catch (Exception e) {
+            fail("Unexpected exception caught");
         }
     }
 
