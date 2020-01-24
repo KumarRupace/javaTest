@@ -42,8 +42,6 @@ import com.java.exception.UnknownCustomerException;
 @RunWith(MockitoJUnitRunner.class)
 public class CustomerControllerTest {
 
-    // private MockMvc mockMvc;
-
     @Mock
     private CustomerRepoService customerRepoService;
     @Captor
