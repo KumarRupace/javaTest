@@ -9,9 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 
 @SpringBootApplication
 @EntityScan(basePackages = { "com.java.dao" })
-@EnableJpaRepositories(basePackages = {"com.java.dao" },
-includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {CrudRepository.class }))
-@ComponentScan(basePackages = { "com.java.dao", "com.java.controller" })
+@EnableJpaRepositories(basePackages = {"com.java.dao" }, 
+    includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, 
+        classes = {CrudRepository.class }))
+@ComponentScan(basePackages = { "com.java.dao", "com.java.controller", "com.java.app" })
 public class AccessingDataJpaApplication {
     public static void main(final String[] args) {
         SpringApplication.run(AccessingDataJpaApplication.class, args);
