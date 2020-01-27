@@ -30,7 +30,7 @@
 
 
 
-## Assesment Solution (Prithvi Kumar):
+## Assessment Solution (Prithvi Kumar):
 
 Since I created this project from stratch, I have used Maven.
 Please let me know if I need to provide a gradle project.
