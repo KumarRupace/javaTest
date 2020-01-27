@@ -30,5 +30,35 @@
 
 
 
-# Done with Assignment ?
-> Create a pull request to master branch and inform us
+## Assesment Solution (Prithvi Kumar):
+
+Since I created this project from stratch, I have used Maven.
+Please let me know if I need to provide a gradle project.
+
+1.Following dependencies have been used in this project:
+JpaRepository for Repository management.
+Lombok for providing getter, setter and other functionality like hash and equals.
+Spring Web - To provide a web server
+H2 Database - In memory database
+
+2.All the REST Apis can be found using the swagger link below:
+http://localhost:8080/swagger-ui.html
+
+3.CustomerController:
+This is a Rest Controller. All the links can be found using swagger.
+
+4.CustomerRepoService:
+This provides all the business logic for various user requests.
+
+5.CustomerRepo:
+This extends JpaRepository. Customer is an entity.
+Added additional methods to find by first and last name. 
+
+6.CustomerControllerTest:
+All the unit tests for CustomerController are written here. This uses mockito extensively.
+
+7.CustomerControllerTest:
+All the unit tests for CustomerController are written here. This uses mockito extensively.
+
+7.CustomerResponseEntityExceptionHandler:
+Manages all the custom exceptions (at runtime)
