@@ -15,7 +15,7 @@ buildscript {
     }
     dependencies {
         classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    // classpath "gradle.plugin.com.palantir:jacoco-coverage:0.4.0"
+        // classpath("gradle.plugin.com.palantir:jacoco-coverage:0.4.0")
     }
 }
 
@@ -27,6 +27,8 @@ apply plugin: 'io.spring.dependency-management'
 // apply plugin: 'com.palantir.jacoco-full-report'
 apply plugin: 'application'
 
+mainClassName = 'com.java.app.AccessingDataJpaApplication'
+
 sourceCompatibility = 1.8
 
 ext {
@@ -34,12 +36,15 @@ ext {
 }
 dependencies {
     testImplementation('junit:junit:4.12')
-    testCompile('org.mockito:mockito-all:1.10.19')
     testCompile('org.mockito:mockito-core:3.2.4')
+    testCompile('org.springframework.security:spring-security-test:5.2.1.RELEASE')
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
     // This dependency is exported to consumers, that is to say found on their compile classpath.
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.cloud:spring-cloud-starter-sleuth') 
+   // compile('org.springframework.cloud:spring-cloud-starter-sleuth') 
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
     compile('org.apache.commons:commons-lang3:3.0')
