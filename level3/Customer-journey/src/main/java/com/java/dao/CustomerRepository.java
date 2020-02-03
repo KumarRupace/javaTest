@@ -1,20 +1,18 @@
 package com.java.dao;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.springframework.data.jpa.repository.Query;
+import com.java.entity.Customer;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-/**
- * Customer Repository
- * 
- * @author Kimi Qian Min
- *
- */
+@Repository
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
-	@Query("select c from Customer c where c.lastName=:lastName")
-	List<Customer> findByLastName(@Param("lastName") String lastName);
+	List<Customer> findByLastName(String lastName);
 
+	Optional<Customer> findByFirstName(String firstName);
+
+	Customer findById(long id);
 }

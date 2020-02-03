@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS CUSTOMER;
+
+create table CUSTOMER(
+  id INT AUTO_INCREMENT  PRIMARY KEY,
+  first_name VARCHAR(250),
+  last_name VARCHAR(250)
+);
