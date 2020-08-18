@@ -1,21 +1,21 @@
 // In this section you declare where to find the dependencies of your project
 repositories {
-	 // This is meven repo
-  	  maven { url 'https://repo.maven.apache.org/maven2/'}
+	// This is meven repo
+	maven { url 'https://repo.maven.apache.org/maven2/'}
 }
 
 buildscript {
 	ext {
-		springBootVersion = '2.1.6.RELEASE' 
+		springBootVersion = '2.1.6.RELEASE'
 	}
 	repositories {
-		 mavenLocal()
-		 // This is  meven repo
-		 maven { url 'https://repo.maven.apache.org/maven2/'}
+		mavenLocal()
+		// This is  meven repo
+		maven { url 'https://repo.maven.apache.org/maven2/'}
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'com.palantir:jacoco-coverage:0.4.0'
+//		classpath 'com.palantir:jacoco-coverage:0.4.0'
 	}
 }
 
@@ -24,7 +24,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.palantir.jacoco-full-report'
+//apply plugin: 'com.palantir.jacoco-full-report'
 apply plugin: 'application'
 
 sourceCompatibility = 1.8
@@ -33,19 +33,20 @@ ext {
 	springCloudVersion = 'Finchley.RELEASE'
 }
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-  compile('org.springframework.boot:spring-boot-starter-actuator')
+	// This dependency is exported to consumers, that is to say found on their compile classpath.
+	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.cloud:spring-cloud-starter-sleuth') 
-	compile('org.springframework.boot:spring-boot-starter-security')
+//	compile('org.springframework.cloud:spring-cloud-starter-sleuth')
+//	compile('org.springframework.boot:spring-boot-starter-security')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 
-	
+	runtimeOnly 'com.h2database:h2'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
 // In this section you declare where to find the dependencies of your project
 repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+	// Use jcenter for resolving your dependencies.
+	// You can declare any Maven/Ivy/file repository here.
+	jcenter()
 }
