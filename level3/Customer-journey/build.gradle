@@ -1,51 +1,50 @@
-// In this section you declare where to find the dependencies of your project
+plugins {
+    id 'org.springframework.boot' version '2.3.3.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.10.RELEASE'
+    id 'java'
+}
+
+group = 'com.java'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 repositories {
-	 // This is meven repo
-  	  maven { url 'https://repo.maven.apache.org/maven2/'}
+    mavenCentral()
 }
-
-buildscript {
-	ext {
-		springBootVersion = '2.1.6.RELEASE' 
-	}
-	repositories {
-		 mavenLocal()
-		 // This is  meven repo
-		 maven { url 'https://repo.maven.apache.org/maven2/'}
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'com.palantir:jacoco-coverage:0.4.0'
-	}
-}
-
-//Plugins
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.palantir.jacoco-full-report'
-apply plugin: 'application'
-
-sourceCompatibility = 1.8
 
 ext {
-	springCloudVersion = 'Finchley.RELEASE'
+    set('springCloudVersion', "Hoxton.SR8")
 }
+
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-  compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.cloud:spring-cloud-starter-sleuth') 
-	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-
-	
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.cloud:spring-cloud-starter-security'
+    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+    implementation('org.springframework.boot:spring-boot-starter-validation')
+    implementation 'junit:junit:4.12'
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testCompile('org.springframework.security:spring-security-test')
 }
 
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+//    useJUnitPlatform()
+    useJUnit()
 }
