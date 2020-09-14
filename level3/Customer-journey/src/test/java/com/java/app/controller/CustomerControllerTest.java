@@ -45,7 +45,7 @@ public class CustomerControllerTest {
     @Test
     public void testGetCustomerWithNoAuthentication() throws Exception {
         mvc.perform(get("/1/customer/1"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(status().is4xxClientError());
     }
 
     @WithMockUser(username=USER)
