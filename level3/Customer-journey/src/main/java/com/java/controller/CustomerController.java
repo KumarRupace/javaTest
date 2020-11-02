@@ -2,14 +2,11 @@ package com.java.controller;
 
 import javax.validation.constraints.NotBlank;
 
+import com.java.dao.CustomerRepoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.java.dao.Customer;;
 
@@ -18,18 +15,49 @@ import com.java.dao.Customer;;
 @Validated
 public class CustomerController {
 
+	@Autowired
+	CustomerRepoService mCustomerService;
+
 	@GetMapping(value = "/{id}")
 	@ResponseBody
 	public ResponseEntity<Customer> getCustomer(@PathVariable("id") @NotBlank String pId) {
-		return null;
-		// complete this method
+		long id = Long.parseLong(pId);
+
+		return ResponseEntity.ok(mCustomerService.retrieve(id));
 	}
 
-	@PutMapping(value = "/")
+	@PostMapping
 	@ResponseBody
-	public ResponseEntity<Customer> addOrUpdateCustomer(Customer pCustomer) {
-		return null;
-		// complete this method
+	public ResponseEntity<Customer> createCustomer(Customer pCustomer) {
+		if (pCustomer == null || pCustomer.getId() != null) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		return ResponseEntity.created(null).body(mCustomerService.save(pCustomer));
+	}
+
+	@PutMapping
+	@ResponseBody
+	public ResponseEntity<Customer> updateCustomer(Customer pCustomer) {
+		if (pCustomer == null || pCustomer.getId() == null) {
+			return ResponseEntity.badRequest().build();
+		}
+
+		if (mCustomerService.exist(pCustomer.getId())) {
+			return ResponseEntity.accepted().body(mCustomerService.save(pCustomer));
+		}
+
+		return ResponseEntity.badRequest().build();
+	}
+
+	@DeleteMapping(value = "/{id}")
+	@ResponseBody
+	public ResponseEntity<Void> deleteCustomer(@PathVariable("id") @NotBlank String pId) {
+		long id = Long.parseLong(pId);
+
+		mCustomerService.delete(id);
+
+		return ResponseEntity.accepted().build();
 	}
 
 }
