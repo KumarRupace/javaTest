@@ -6,4 +6,9 @@ spring:
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     database: MYSQL
-    hibernate.hbm2ddl.auto: update
+    hibernate:
+      ddl-auto: none
+      use-new-id-generator-mappings: false
+    properties:
+      hibernate.hbm2ddl.auto: none
+      hibernate.id.new_generator_mappings: true

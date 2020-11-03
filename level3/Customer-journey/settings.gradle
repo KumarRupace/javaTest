@@ -8,3 +8,5 @@
  */
 
 rootProject.name = 'Customer-journey'
+include 'test'
+

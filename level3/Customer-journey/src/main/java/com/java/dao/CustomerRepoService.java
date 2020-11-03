@@ -2,14 +2,17 @@ package com.java.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class CustomerRepoService {
 
 	@Autowired
 	private CustomerRepository mCustomerRepository;
 
 	// TODO implement all DAO api here.
+	@Transactional(readOnly = true)
 	public Customer retrieve(long id) {
 		return mCustomerRepository.findById(id);
 	}
@@ -18,7 +21,8 @@ public class CustomerRepoService {
 		return mCustomerRepository.save(customer);
 	}
 
-	public boolean exist(long id) {
+	@Transactional(readOnly = true)
+	public boolean exists(long id) {
 		return mCustomerRepository.existsById(id);
 	}
 

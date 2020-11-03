@@ -16,7 +16,7 @@ import com.java.dao.Customer;;
 public class CustomerController {
 
 	@Autowired
-	CustomerRepoService mCustomerService;
+	private CustomerRepoService mCustomerService;
 
 	@GetMapping(value = "/{id}")
 	@ResponseBody
@@ -43,7 +43,7 @@ public class CustomerController {
 			return ResponseEntity.badRequest().build();
 		}
 
-		if (mCustomerService.exist(pCustomer.getId())) {
+		if (mCustomerService.exists(pCustomer.getId())) {
 			return ResponseEntity.accepted().body(mCustomerService.save(pCustomer));
 		}
 
