@@ -1,18 +1,23 @@
 package com.java.controller;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.java.dao.CustomerRepoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import com.java.dao.Customer;;
+import com.java.dao.Customer;
 
+import static com.java.app.Constants.MSG_INVALID_USER_ID;
+import static com.java.app.Constants.MSG_NO_RECORD_FOUND;
+
+@Validated
 @RestController
 @RequestMapping("/1/customer")
-@Validated
 public class CustomerController {
 
 	@Autowired
@@ -20,15 +25,25 @@ public class CustomerController {
 
 	@GetMapping(value = "/{id}")
 	@ResponseBody
-	public ResponseEntity<Customer> getCustomer(@PathVariable("id") @NotBlank String pId) {
-		long id = Long.parseLong(pId);
+	public ResponseEntity<?> getCustomer(@PathVariable("id") @NotBlank String pId) {
+		try {
+			long id = Long.parseLong(pId);
 
-		return ResponseEntity.ok(mCustomerService.retrieve(id));
+			Customer customer = mCustomerService.retrieve(id);
+
+			if (customer != null) {
+				return ResponseEntity.ok(customer);
+			}
+
+			return ResponseEntity.ok().body(MSG_NO_RECORD_FOUND);
+		} catch (NumberFormatException e) {
+			return ResponseEntity.badRequest().body(MSG_INVALID_USER_ID);
+		}
 	}
 
 	@PostMapping
 	@ResponseBody
-	public ResponseEntity<Customer> createCustomer(Customer pCustomer) {
+	public ResponseEntity<Customer> createCustomer(@RequestBody @Valid Customer pCustomer) {
 		if (pCustomer == null || pCustomer.getId() != null) {
 			return ResponseEntity.badRequest().build();
 		}
@@ -38,7 +53,7 @@ public class CustomerController {
 
 	@PutMapping
 	@ResponseBody
-	public ResponseEntity<Customer> updateCustomer(Customer pCustomer) {
+	public ResponseEntity<Customer> updateCustomer(@Valid @RequestBody Customer pCustomer) {
 		if (pCustomer == null || pCustomer.getId() == null) {
 			return ResponseEntity.badRequest().build();
 		}
@@ -52,12 +67,16 @@ public class CustomerController {
 
 	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public ResponseEntity<Void> deleteCustomer(@PathVariable("id") @NotBlank String pId) {
-		long id = Long.parseLong(pId);
+	public ResponseEntity<?> deleteCustomer(@PathVariable("id") @NotBlank String pId) {
+		try {
+			long id = Long.parseLong(pId);
 
-		mCustomerService.delete(id);
+			mCustomerService.delete(id);
 
-		return ResponseEntity.accepted().build();
+			return ResponseEntity.accepted().build();
+		} catch (NumberFormatException e) {
+			return ResponseEntity.badRequest().body(MSG_INVALID_USER_ID);
+		}
 	}
 
 }

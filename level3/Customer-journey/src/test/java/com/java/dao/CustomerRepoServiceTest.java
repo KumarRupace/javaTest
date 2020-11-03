@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.validation.ConstraintViolationException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -23,8 +24,7 @@ public class CustomerRepoServiceTest {
     private static final String NEW_CUSTOMER_FIRST_NAME = "Jun Wei";
     private static final String NEW_CUSTOMER_LAST_NAME = "Chang";
 
-    private static final String VERY_LONG_FIRST_NAME = "Anderson Jason Andrew James Samuel";
-    private static final String VERY_LONG_LAST_NAME = "Chang Chi Yoong Teo Zhang";
+    private static final String VERY_LONG_NAME = "Anderson Jason Andrew James Samuel";
 
     @Autowired
     private CustomerRepoService mCustomerRepoService;
@@ -33,7 +33,7 @@ public class CustomerRepoServiceTest {
     private CustomerRepository mCustomerRepository;
 
     @Test
-    public void testCreateCustomerRecord_WhenFirstNameIsNull_ShouldThrowDataIntegrityViolationException() {
+    public void testCreateCustomerRecord_WhenFirstNameIsNull_ShouldThrowConstraintViolationException() {
         Customer customer = new Customer(null, NEW_CUSTOMER_LAST_NAME);
 
         Throwable thrown = catchThrowable(() -> {
@@ -41,11 +41,12 @@ public class CustomerRepoServiceTest {
         });
 
         assertThat(thrown)
-                .isInstanceOf(DataIntegrityViolationException.class);
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("must not be null");
     }
 
     @Test
-    public void testCreateCustomerRecord_WhenLastNameIsNull_ShouldThrowDataIntegrityViolationException() {
+    public void testCreateCustomerRecord_WhenLastNameIsNull_ShouldThrowConstraintViolationException() {
         Customer customer = new Customer(NEW_CUSTOMER_FIRST_NAME, null);
 
         Throwable thrown = catchThrowable(() -> {
@@ -53,32 +54,34 @@ public class CustomerRepoServiceTest {
         });
 
         assertThat(thrown)
-                .isInstanceOf(DataIntegrityViolationException.class);
-
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("must not be null");
     }
 
     @Test
-    public void testCreateCustomerRecord_WithVeryLongFirstName_ShouldThrowJpaSystemException() {
-        Customer customer = new Customer(VERY_LONG_FIRST_NAME, NEW_CUSTOMER_LAST_NAME);
+    public void testCreateCustomerRecord_WithVeryLongFirstName_ShouldThrowConstraintViolationException() {
+        Customer customer = new Customer(VERY_LONG_NAME, NEW_CUSTOMER_LAST_NAME);
 
         Throwable thrown = catchThrowable(() -> {
             mCustomerRepoService.save(customer);
         });
 
         assertThat(thrown)
-            .isInstanceOf(JpaSystemException.class);
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("size must be between 0 and 30");
     }
 
     @Test
-    public void testCreateCustomerRecord_WithVeryLongLastName_ShouldThrowJpaSystemException() {
-        Customer customer = new Customer(NEW_CUSTOMER_FIRST_NAME, VERY_LONG_LAST_NAME);
+    public void testCreateCustomerRecord_WithVeryLongLastName_ShouldThrowConstraintViolationException() {
+        Customer customer = new Customer(NEW_CUSTOMER_FIRST_NAME, VERY_LONG_NAME);
 
         Throwable thrown = catchThrowable(() -> {
             mCustomerRepoService.save(customer);
         });
 
         assertThat(thrown)
-                .isInstanceOf(JpaSystemException.class);
+                .isInstanceOf(ConstraintViolationException.class)
+                .hasMessageContaining("size must be between 0 and 30");
     }
 
     @Test
@@ -140,7 +143,7 @@ public class CustomerRepoServiceTest {
     }
 
     @Test
-    public void testExists() {
+    public void testCustomerRecordExists() {
         // Where Record Exist in Database
         assertTrue(mCustomerRepoService.exists(3));
 
