@@ -4,6 +4,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 
 import com.java.dao.CustomerRepoService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,7 @@ import static com.java.app.Constants.MSG_NO_RECORD_FOUND;
 @RestController
 @RequestMapping("/1/customer")
 public class CustomerController {
-
+	
 	@Autowired
 	private CustomerRepoService mCustomerService;
 
@@ -43,8 +45,8 @@ public class CustomerController {
 
 	@PostMapping
 	@ResponseBody
-	public ResponseEntity<Customer> createCustomer(@RequestBody @Valid Customer pCustomer) {
-		if (pCustomer == null || pCustomer.getId() != null) {
+	public ResponseEntity<Customer> createCustomer(@Valid @RequestBody Customer pCustomer) {
+		if (pCustomer.getId() != null) {
 			return ResponseEntity.badRequest().build();
 		}
 

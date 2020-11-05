@@ -5,6 +5,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import static com.java.app.Constants.MSG_MUST_BE_ALPHABETICAL;
+
 @Entity
 @Table(name = "customer")
 public class Customer {
@@ -15,13 +17,13 @@ public class Customer {
 
 	@NotNull
 	@Size(max = 30)
-	@Pattern(regexp = "^[A-Za-z][A-Za-z ]+")
+	@Pattern(regexp = "^[A-Za-z][A-Za-z ]+", message = MSG_MUST_BE_ALPHABETICAL)
 	@Column(name = "first_name", length = 30, nullable = false)
 	private String firstName;
 
 	@NotNull
 	@Size(max = 30)
-	@Pattern(regexp = "^[A-Za-z][A-Za-z ]+")
+	@Pattern(regexp = "^[A-Za-z][A-Za-z ]+", message = MSG_MUST_BE_ALPHABETICAL)
 	@Column(name = "last_name", length = 30, nullable = false)
 	private String lastName;
 
