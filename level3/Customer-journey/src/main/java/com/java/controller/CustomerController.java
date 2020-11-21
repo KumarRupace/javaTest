@@ -1,35 +1,56 @@
 package com.java.controller;
 
-import javax.validation.constraints.NotBlank;
-
+import com.java.dao.Customer;
+import com.java.dao.CustomerRepoService;
+import com.java.exceptions.UnableToSaveException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.java.dao.Customer;;
+import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/1/customer")
+@RequestMapping("/customers")
 @Validated
 public class CustomerController {
 
-	@GetMapping(value = "/{id}")
-	@ResponseBody
-	public ResponseEntity<Customer> getCustomer(@PathVariable("id") @NotBlank String pId) {
-		return null;
-		// complete this method
-	}
+    private final CustomerRepoService customerRepoService;
 
-	@PutMapping(value = "/")
-	@ResponseBody
-	public ResponseEntity<Customer> addOrUpdateCustomer(Customer pCustomer) {
-		return null;
-		// complete this method
-	}
+    @Autowired
+    CustomerController(CustomerRepoService customerRepoService) {
+        this.customerRepoService = customerRepoService;
+    }
 
+    @GetMapping
+    public ResponseEntity<Iterable<Customer>> getAllCustomers() {
+        Iterable<Customer> customers = customerRepoService.getAllCustomers();
+        return ResponseEntity.ok(customers);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Customer> getCustomerById(@PathVariable("id") Long customerId) {
+        Customer existingCustomer = customerRepoService.getCustomerById(customerId);
+        return new ResponseEntity(existingCustomer, HttpStatus.OK);
+    }
+
+    @PostMapping
+    public ResponseEntity<Customer> saveCustomer(@Valid @RequestBody Customer customerToSave) throws UnableToSaveException {
+        Customer savedCustomer = customerRepoService.saveNewCustomer(customerToSave);
+        return new ResponseEntity(savedCustomer, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Long customerId,
+                                                   @Valid @RequestBody Customer customerToUpdate) throws UnableToSaveException {
+        Customer updatedCustomer = customerRepoService.updateExistingCustomer(customerId, customerToUpdate);
+        return ResponseEntity.ok(updatedCustomer);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable("id") Long customerId) {
+        customerRepoService.deleteExistingCustomer(customerId);
+        return ResponseEntity.ok("Customer successfully deleted");
+    }
 }
