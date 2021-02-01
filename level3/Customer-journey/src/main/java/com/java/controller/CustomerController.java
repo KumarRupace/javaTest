@@ -1,35 +1,44 @@
 package com.java.controller;
 
-import javax.validation.constraints.NotBlank;
-
+import com.java.dao.Customer;
+import com.java.dao.CustomerRepoService;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.java.dao.Customer;;
+import javax.validation.constraints.NotBlank;
 
 @RestController
 @RequestMapping("/1/customer")
 @Validated
 public class CustomerController {
 
+	@Autowired
+	private CustomerRepoService service;
+
+	@ApiOperation(notes = "Returns a Customer by id", value = "Returns a Customer by id", tags = "Customer")
 	@GetMapping(value = "/{id}")
 	@ResponseBody
 	public ResponseEntity<Customer> getCustomer(@PathVariable("id") @NotBlank String pId) {
-		return null;
-		// complete this method
+		return new ResponseEntity<>(service.findCustomerById(pId), HttpStatus.OK);
 	}
 
-	@PutMapping(value = "/")
+	@ApiOperation(notes = "Deleted a Customer by id", value = "Deletes a Customer by id", tags = "Customer")
+	@DeleteMapping(value = "/{id}")
 	@ResponseBody
-	public ResponseEntity<Customer> addOrUpdateCustomer(Customer pCustomer) {
-		return null;
-		// complete this method
+	public ResponseEntity<String> deleteCustomer(@PathVariable String id) {
+		service.deleteCustomer(id);
+		return new ResponseEntity<>(HttpStatus.ACCEPTED);
+
 	}
 
+	@ApiOperation(notes = "Add or Update a Customer", value = "Add or Update a Customer", tags = "Customer")
+	@PutMapping(value = "/updateCustomer")
+	@ResponseBody
+	public ResponseEntity<Customer> addOrUpdateCustomer(@RequestBody Customer customer) {
+		return new ResponseEntity<>(service.updateOrAddCustomer(customer), HttpStatus.OK);
+	}
 }

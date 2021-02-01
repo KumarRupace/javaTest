@@ -26,6 +26,12 @@ public class Customer {
 		return String.format("Customer[id=%d, firstName='%s', lastName='%s']", id, firstName, lastName);
 	}
 
+	public void setId(Long id) { this.id = id; }
+
+	public void setFirstName(String firstName) { this.firstName = firstName; }
+
+	public void setLastName(String lastName) { this.lastName = lastName; }
+
 	public Long getId() {
 		return id;
 	}
