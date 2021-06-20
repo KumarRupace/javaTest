@@ -1,0 +1,58 @@
+app:
+  name: CustomerManagementService
+  description: CustomerManagementService
+  version: 1.0.0
+
+
+server:
+  port : 8080
+  netty:
+    connection-timeout: 1200000
+    #max response size ?
+
+logging:
+  file:
+    name: customer-management-service.log
+  level:
+    root: INFO
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: customerManagementService
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:customerdb
+    username: sa
+    password: sa
+    initialization-mode: always
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 4096KB
+      max-file-size: 4096KB
+
+  jpa:
+    hibernate:
+    ddl-auto: none
+    database-platform: org.hibernate.dialect.H2Dialect
+  h2:
+    console:
+      enabled: true
+
+  flyway:
+    baselineOnMigrate: true
+    check-location: true
+    locations: classpath:db/migration
+    url: jdbc:h2:mem:customerdb
+    schemas: customerdb
+    enabled: true
+  sql:
+    init:
+      platform: h2
+      mode:
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

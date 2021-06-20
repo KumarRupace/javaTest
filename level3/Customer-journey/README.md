@@ -1,34 +1,108 @@
-# Java Assessment (Customer Journey)
+# Customer Management Service
 
-### Assessment Objective
+Functional Requirements
+User stories : Crud for customer entity, please refer to the requirement spec docs for details.
 
-1. Able to work with Java &  MVC
-2. Able to design a sample ReST API using spring-boot
-3. Able to write unit test and documentation
+Non-Functional Requirements
+Able to work with Java & MVC
+Able to design a sample ReST API using spring-boot
+Able to write unit test and documentation
 
-> **Task**
+##Assumptions/Special cases
 
-| Seq | Class Name|  To Do|
-|------ | ------ | -----|
-|1| CustomerRepoService.java | write/call  JPA methods to query DB|
-|2| CustomerController.java | Implement PUT, DELETE & POST  to update, remove and create customer entity respectively.|
-|3| CustomerRepoServiceTest.java|Create and write unit test cases for CustomerRepoServiceTest.java class|
-|4| CustomerControllerTest.java|Create and write unit test cases for CustomerController.java class|
+Authentication and other security factors were not considered in this exercise
 
-> Assumptions 
-```
-1. You can use H2 DB for your project
-2. Entity defined is equivalent to your table (no modification required)
-3. Autoload SQL file is permitted to put sample values
-4. You can include any opensource library if you need to
-5. Writing negative test cases is good to have
-```
-|You can| You cannot|
-|------|------|
-|You can search on web| Do not copy & paste web example |
-| Understand the concept and answer | Don't get it done by other person |
+Secure credentials are available as Environment variables in all non dev environments and referred in the application.yml file
 
+Detailed error messages are not passed down to the caller.
 
+EventSourcing/Event Driven Architecture is not implemented as this is written as a simple service though the provision for adopting it is available.
 
-# Done with Assignment ?
-> Create a pull request to master branch and inform us
+CQRS pattern was not considered at Service layer bcoz of the scope (design a sample ReST API using spring-boot)
+
+For Dev: H2-InMemory was used for testing
+
+## Setup/Installation
+
+Open the POM file or project folder using IntelliJ IDEA or similar IDE for Java and run the application (The application will start listening at localhost:8080)
+
+# Swagger API Docs
+
+Once the application starts running, swagger ui can be viewed at http://localhost:8080/swagger-ui/index.html
+
+# Architecture, Design Patterns, OOPS Principles used
+
+Rest Calls, DI, Inheritance & Interfaces, Transaction, TDD, Custom Exception Handling 
+
+# Data Flow
+
+No separate DTO class was created due to the scope of the project
+RestAPI(DTO) --> Service(Entity/DTO) --> Repository(Entity) --> H2InMemoryDB(Record) and vice version
+
+## Usage
+
+Running the App
+
+You can run the app via IntelliJ or any similar IDE (Standard Springboot-Maven)
+
+Use PostmanCanary and import the attached postman scripts (customer-management-service.postman_collection.json), run the collection under customer-management-service title
+
+Basic health check : http://localhost:8080/actuator/health
+
+# Automated Testing
+
+Running the Test
+
+All the tests (unit test and integration tests) are at ...\test\java\com\... folder
+
+Ensure maven is installed and available at PATH (environment) and run the following command from the project root folder
+
+Run via test class at the IDE or use mvn test
+
+#Deployments
+
+Profile files are available for various environments (all credentials has to be passed via environment variables for non dev)
+dev test prod
+
+Please thoroughly review application.yml and create application-prod.yml accordingly before publishing to any production environment.
+
+Image Creation
+docker build --build-arg ENVIRONMENT=local .
+Running in interactive mode
+docker run <image_id> -p 8080:8080 -t
+
+# Improvements and Extensions
+
+CQRS and Event Sourcing
+
+Separate class for DTOs
+
+Addition monitoring alert for failures and downtimes
+
+Logging can be more comprehensive
+
+Exceptions to be notified to L1 support via email or sms
+
+Automate build and deployment management including terraform scripts(CI/CD pipeline) e.g., using Jenkins or bitbucket pipelines
+
+Adding cache data to improve performance
+
+Codes for Securing API
+
+Adding more Clear and concise logs that are easy to read and parse
+
+Selenium or similar UI based tool if the UI is in scope of the project
+
+Create deployment pipeline scripts for Kubernetes cluster deployment
+
+## Contributing
+
+N.A.
+
+## License
+
+N.A.
+
+# Support or Queries
+
+email to: renjithkumar1@gmail.com

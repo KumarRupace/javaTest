@@ -1,9 +1,17 @@
 package com.java.app;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-@SpringBootApplication
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+@SpringBootApplication(scanBasePackages = "com.java")
+@EntityScan("com.java.dao")
+@EnableJpaRepositories("com.java.dao")
 public class AccessingDataJpaApplication {
+
 	public static void main(String[] args) {
 		SpringApplication.run(AccessingDataJpaApplication.class, args);
 	}
+
 }
