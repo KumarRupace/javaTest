@@ -1,51 +1,62 @@
-// In this section you declare where to find the dependencies of your project
+plugins {
+	id 'org.springframework.boot' version '2.5.1'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'jacoco'
+}
+
+group = 'com.customer.journey'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
 repositories {
-	 // This is meven repo
-  	  maven { url 'https://repo.maven.apache.org/maven2/'}
+	mavenCentral()
 }
 
-buildscript {
-	ext {
-		springBootVersion = '2.1.6.RELEASE' 
-	}
-	repositories {
-		 mavenLocal()
-		 // This is  meven repo
-		 maven { url 'https://repo.maven.apache.org/maven2/'}
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		classpath 'com.palantir:jacoco-coverage:0.4.0'
-	}
-}
-
-//Plugins
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
-apply plugin: 'com.palantir.jacoco-full-report'
-apply plugin: 'application'
-
-sourceCompatibility = 1.8
-
-ext {
-	springCloudVersion = 'Finchley.RELEASE'
-}
 dependencies {
-    // This dependency is exported to consumers, that is to say found on their compile classpath.
-  compile('org.springframework.boot:spring-boot-starter-actuator')
-	compile('org.springframework.boot:spring-boot-starter-web')
-	compile('org.springframework.cloud:spring-cloud-starter-sleuth') 
-	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.boot:spring-boot-starter-data-jpa')
-
-	
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation 'org.apache.commons:commons-lang3'
+	implementation 'io.springfox:springfox-boot-starter:3.0.0'
+	implementation 'io.springfox:springfox-swagger2:3.0.0'	
+	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
+	runtimeOnly 'com.h2database:h2'
+	testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
 }
 
-// In this section you declare where to find the dependencies of your project
-repositories {
-    // Use jcenter for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
-    jcenter()
+test {
+	useJUnitPlatform()
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacocoTestCoverageVerification {
+  violationRules {
+    rule {
+      limit {
+        counter = 'LINE'
+        value = 'COVEREDRATIO'
+        minimum = 1.0
+      }
+      excludes = [
+          'com.customer.journey.dao.CustomerRepository',
+          'com.customer.journey.domain.Customer',
+          'com.customer.journey.swagger.SwaggerConfig',
+          'com.customer.journey.advice.ApplicationAdvice',
+          'com.customer.journey.validation.*',
+          'com.customer.journey.exception.*',
+          'com.customer.journey.util.*'
+      ]
+    }
+  }
 }

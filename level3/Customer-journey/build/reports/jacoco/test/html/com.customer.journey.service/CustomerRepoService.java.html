@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CustomerRepoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Customer-journey</a> &gt; <a href="index.source.html" class="el_package">com.customer.journey.service</a> &gt; <span class="el_source">CustomerRepoService.java</span></div><h1>CustomerRepoService.java</h1><pre class="source lang-java linenums">package com.customer.journey.service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import com.customer.journey.dao.CustomerRepository;
+import com.customer.journey.domain.Customer;
+import com.customer.journey.exception.ApplicationException;
+import com.customer.journey.util.CustomerConstants;
+
+/**
+ * @author Jhonson
+ *
+ */
+@Service
+<span class="fc" id="L20">public class CustomerRepoService implements ICustomerRepoService {</span>
+
+	@Autowired
+	private CustomerRepository customerRepository;
+	
+	@Autowired
+	MessageSource messageSource;
+
+	public Customer findById(long id) throws ApplicationException {
+<span class="fc" id="L29">		Customer customer = customerRepository.findById(id)</span>
+<span class="fc" id="L30">				.orElseThrow(() -&gt; new ApplicationException(CustomerConstants.CUST_NOT_FOUND));</span>
+<span class="fc" id="L31">		return customer;</span>
+	}
+
+	public List&lt;Customer&gt; getAllCustomers() {
+<span class="fc" id="L35">		return (List&lt;Customer&gt;) customerRepository.findAll();</span>
+	}
+
+	@Override
+	@Transactional
+	public Customer addCustomer(Customer customer) throws ApplicationException {
+
+<span class="fc" id="L42">		return customerRepository.save(customer);</span>
+	}
+
+	@Override
+	@Transactional
+	public Customer updateCustomer(Customer customer) throws ApplicationException {
+
+<span class="fc" id="L49">		customerRepository.findById(customer.getId())</span>
+<span class="fc" id="L50">				.orElseThrow(() -&gt; new ApplicationException(CustomerConstants.UPDATE_FAIL));</span>
+
+<span class="fc" id="L52">		return customerRepository.save(customer);</span>
+	}
+
+	@Override
+	@Transactional
+	public Customer deleteCustomer(Customer customer) throws ApplicationException {
+
+<span class="fc" id="L59">		customerRepository.findById(customer.getId())</span>
+<span class="fc" id="L60">				.orElseThrow(() -&gt; new ApplicationException(CustomerConstants.DELETE_FAIL));</span>
+
+<span class="fc" id="L62">		customerRepository.delete(customer);</span>
+
+<span class="fc" id="L64">		return customer;</span>
+	}
+
+	@Override
+	@Transactional
+	public List&lt;Customer&gt; addAllCustomer(List&lt;Customer&gt; pCustomers) {
+	
+<span class="fc" id="L71">		return StreamSupport.stream( customerRepository.saveAll(pCustomers).spliterator(), false)</span>
+<span class="fc" id="L72">				.collect(Collectors.toList());</span>
+	}
+
+	@Override
+	@Transactional
+	public List&lt;Customer&gt; updateAllCustomer(List&lt;Customer&gt; pCustomers) {
+		
+<span class="fc" id="L79">		pCustomers.forEach(customer -&gt; {</span>
+<span class="fc" id="L80">					customerRepository.findById(customer.getId())</span>
+<span class="pc" id="L81">							.orElseThrow(() -&gt; new ApplicationException(CustomerConstants.UPDATE_FAIL));</span>
+<span class="fc" id="L82">			  });</span>
+		
+<span class="fc" id="L84">		return StreamSupport.stream( customerRepository.saveAll(pCustomers).spliterator(), false)</span>
+<span class="fc" id="L85">				.collect(Collectors.toList());</span>
+	}
+
+	@Override
+	@Transactional
+	public List&lt;Customer&gt; deleteAllCustomer(List&lt;Customer&gt; pCustomers) {
+		
+<span class="fc" id="L92">		pCustomers.forEach(customer -&gt; {</span>
+<span class="fc" id="L93">			customerRepository.findById(customer.getId())</span>
+<span class="pc" id="L94">					.orElseThrow(() -&gt; new ApplicationException(CustomerConstants.DELETE_FAIL));</span>
+<span class="fc" id="L95">	    });</span>
+
+<span class="fc" id="L97">		customerRepository.deleteAll(pCustomers);</span>
+		
+<span class="fc" id="L99">		return pCustomers;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.6.202009150832</span></div></body></html>

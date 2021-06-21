@@ -1,0 +1,10 @@
+com.customer.journey
+com.customer.journey.advice
+com.customer.journey.controller
+com.customer.journey.dao
+com.customer.journey.domain
+com.customer.journey.exception
+com.customer.journey.service
+com.customer.journey.swagger
+com.customer.journey.util
+com.customer.journey.validation
